@@ -5,46 +5,59 @@
 //Diego Mencos
 //Carne 18300
 
+//Definicion de Variables
 
+//PUSHBUTTOMS
 const int buttonPin = PUSH1;     
 const int buttonPin2 = PUSH2;    
 
-
-const byte cont1_0 = 19; //
+//PINES DE LA TIVA PARA LOS LED
+//JUGADOR 1
+const byte cont1_0 = 19; 
 const byte cont1_1 = 38;
 const byte cont1_2 = 37; 
-const byte cont1_3 = 36; //Definimos el pin del PUSH 2
-const byte cont1_4 = 35; //Definimos el pin del PUSH 1
-const byte cont1_5 = 34; //Definimos el pin del PUSH 2
-const byte cont1_6 = 33; //Definimos el pin del PUSH 1
-const byte cont1_7 = 32; //Definimos el pin del PUSH 2
+const byte cont1_3 = 36; 
+const byte cont1_4 = 35; 
+const byte cont1_5 = 34;
+const byte cont1_6 = 33; 
+const byte cont1_7 = 32; 
 
-const byte cont2_0 = 2; //Definimos el pin del PUSH 1
-const byte cont2_1 = 3; //Definimos el pin del PUSH 2
-const byte cont2_2 = 4; //Definimos el pin del PUSH 1
-const byte cont2_3 = 5; //Definimos el pin del PUSH 2
-const byte cont2_4 = 6; //Definimos el pin del PUSH 1
-const byte cont2_5 = 7; //Definimos el pin del PUSH 2
-const byte cont2_6 = 8; //Definimos el pin del PUSH 1
-const byte cont2_7 = 9; //Definimos el pin del PUSH 2
+//JUGADOR 2
+const byte cont2_0 = 2; 
+const byte cont2_1 = 3; 
+const byte cont2_2 = 4; 
+const byte cont2_3 = 5;
+const byte cont2_4 = 6; 
+const byte cont2_5 = 7; 
+const byte cont2_6 = 8; 
+const byte cont2_7 = 9; 
 
-// variables will change:
+// Variables que usare a lo largo del programa
+
+//Guardar estado de botones
 int buttonState = 0;         // variable for reading the pushbutton status
 int buttonState2 = 0;         // variable for reading the pushbutton status
 
+
+//Variables que se utilizaran para revisar flancos
 int lastbuttonState = 1;         // variable for reading the pushbutton status
 int lastbuttonState2 = 1;         // variable for reading the pushbutton status
 
+//Contadores
 int cont1 = 0;
 int cont2 = 0;
+
+//Bandera de inicio de semaforo
 int bandera = 0;
+
+//Bandera de ganador
 int ganador = 0;
 int indice=0;
 
 void setup() {
   Serial.begin(9600);
 
-
+//Ponemos en Salida todos los LEDs
   pinMode(GREEN_LED, OUTPUT);
   pinMode(RED_LED, OUTPUT);
   pinMode(BLUE_LED, OUTPUT);
@@ -67,22 +80,21 @@ void setup() {
   pinMode(cont2_6, OUTPUT);
   pinMode(cont2_7, OUTPUT);
 
-
+//Entrada los botones de la TIVA
   pinMode(buttonPin, INPUT_PULLUP);
   pinMode(buttonPin2, INPUT_PULLUP);
 
-
+//Inicializamos nuestra bandera en 1, para comenzar de una vez
   bandera = 1;
 }
 
 void loop() {
 
+//Leemos el estado de nuestros botones
   buttonState = digitalRead(buttonPin);
   buttonState2 = digitalRead(buttonPin2);
-  Serial.print(buttonState);
-  Serial.print(buttonState2);
 
-
+//Verificamos que algun boton se apache para empezar el semaforo
   if ((buttonState == LOW||buttonState2 == LOW) && bandera == 1) {
     bandera = 0;
     resetear();
@@ -97,31 +109,23 @@ void loop() {
     delay(1000);
     digitalWrite(GREEN_LED, LOW);
 
+//Reseteamos nuestros contadores
     cont1 = 0;
     cont2 = 0;
     while (bandera != 1) {
 
+//Volvemos a leer nuestros botones para ver si el contador va a incrementar
       buttonState = digitalRead(buttonPin);
       buttonState2 = digitalRead(buttonPin2);
-      //  Serial.print(buttonState);
-      //  Serial.print(buttonState2);
-      Serial.print("Conteo 1");
-      Serial.print("\n");
-      Serial.print(cont1);
-      Serial.print("Conteo 2");
-      Serial.print("\n");
-      Serial.print(cont2);
 
-
-      // check if the pushbutton is pressed.
-      // if it is, the buttonState is HIGH:
+//Verificamos si hay algun flanco 
       if (buttonState != lastbuttonState) {
         lastbuttonState = buttonState;
+        //Si esta apachado, aumentar el contador
         if (buttonState == LOW) {
-
           cont1++;
+          //Funcion para encender el led correspondiente, dependiendo la posicion del jugador
           funcionContador(cont1, 1);
-          // lastbuttonState=buttonState;
 
         }
       }
@@ -129,10 +133,8 @@ void loop() {
       else if (buttonState2 != lastbuttonState2) {
         lastbuttonState2 = buttonState2;
         if (buttonState2 == LOW) {
-
           cont2++;
           funcionContador(cont2, 2);
-          // lastbuttonState2=buttonState2;
         }
       }
 
@@ -142,6 +144,7 @@ void loop() {
     //RUTINA GANADOR
     if (ganador == 1) {
       resetear();
+      //Hacemos que el led del jugador ganador parpadee varias veces
       for (indice = 0; indice <= 7; indice++) {
         digitalWrite(cont1_7, HIGH);
         delay(200);
@@ -157,18 +160,12 @@ void loop() {
         delay(200);
         digitalWrite(cont2_7, LOW);
          delay(200);
-      }
-
-      
+      }  
     }
-
-
-
   }
-
-
 }
 
+//Funcion para saber que leds encender 
 void funcionContador(int n, int m) {
   if (m == 1) {
 
@@ -364,6 +361,7 @@ void funcionContador(int n, int m) {
   }
 }
 
+//Apagamos todos nuestros LEDS
 void resetear() {
 
   digitalWrite(cont1_0, LOW);
