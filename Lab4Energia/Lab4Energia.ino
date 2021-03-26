@@ -1,11 +1,18 @@
+//Universidad del Valle de Guatemala
+//Departamento de Ingenieria Mecatronica
+//Curso: Digital 2
+//Catedratico: Kurt Kellner
+//Diego Mencos
+//Carne 18300
 
-const int buttonPin = PUSH1;     // the number of the pushbutton pin
-const int buttonPin2 = PUSH2;     // the number of the pushbutton pin
+
+const int buttonPin = PUSH1;     
+const int buttonPin2 = PUSH2;    
 
 
-const byte cont1_0 = 19; 
+const byte cont1_0 = 19; //
 const byte cont1_1 = 38;
-const byte cont1_2 = 37; //Definimos el pin del PUSH 1
+const byte cont1_2 = 37; 
 const byte cont1_3 = 36; //Definimos el pin del PUSH 2
 const byte cont1_4 = 35; //Definimos el pin del PUSH 1
 const byte cont1_5 = 34; //Definimos el pin del PUSH 2
